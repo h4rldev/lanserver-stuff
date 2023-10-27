@@ -13,7 +13,7 @@ fi
 if [[ -f "run.sh" ]]; then
 	echo "Seems like forge-${forge_version} is already installed. Want to reinstall? [Y/n]"
 	read -r answer
-	if [[ ${answer} != "${answer#[Yy]}" ]]; then
+	if [[ ${answer} == "${answer#[Yy]}" ]]; then
 		rm -rf libraries
 		rm -rf run.bat
 		rm -rf run.sh
