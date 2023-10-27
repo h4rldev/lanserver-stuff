@@ -18,20 +18,25 @@ if not exist "eula.txt" (
 	echo eula doesn't exist, will change it automatically.
 	goto :eula_no_exist
 ) else (
-	java @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.19.2-43.3.2/win_args.txt nogui %*
-	pause
-	exit
+	goto :start_server
 )
 
+:start_server
+echo starting server
+java @settings.txt @libraries/net/minecraftforge/forge/1.19.2-43.3.2/win_args.txt nogui %*
+timeout /t 5
+goto :start_server
+
+
 :eula_no_exist
-java @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.19.2-43.3.2/win_args.txt nogui %* 1> nul
-powershell.exe -Command "iwr https://github.com/h4rldev/eula/releases/latest/download/eula.exe -OutFile './eula.exe'"
+java @settings.txt @libraries/net/minecraftforge/forge/1.19.2-43.3.2/win_args.txt nogui %* 1> nul
+curl -O "https://github.com/h4rldev/eula/releases/latest/download/eula.exe"
 eula.exe
 if %errorlevel% EQU 0 (
 	del eula.exe
 	cls
 ) else (
-	echo eula shat itself
+	echo eula not accepted, please accept it manually.
 	pause
 	exit
 )
