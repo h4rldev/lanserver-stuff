@@ -51,13 +51,30 @@ install_forge() {
 	fi
 }
 
-if curl -O "https://raw.githubusercontent.com/h4rldev/lanserver-stuff/main/run.sh"; then
-	echo "Downloaded run.sh"
-	chmod +x run.sh
-else
-	echo "Failed to download run.sh"
-	exit 1
-fi
+get_run() {
+	if curl -O "https://raw.githubusercontent.com/h4rldev/lanserver-stuff/main/run.sh"; then
+		echo "Downloaded run.sh"
+		chmod +x run.sh
+	else
+		echo "Failed to download run.sh"
+		exit 1
+	fi
+}
 
-echo -e "Done. Edit settings.txt and run run.sh to start the server."
-echo -e "You may also want to change the server.properties file after generation."
+case "$1" in
+"--help")
+	just run the installer.
+	exit 0
+	;;
+*)
+	echo "Starting server..."
+	check_java
+	check_installation
+	check_if_installer_exists
+	install_forge
+	get_run
+	run_server "$@"
+	echo -e "Done. Edit settings.txt and run run.sh to start the server."
+	echo -e "You may also want to change the server.properties file after generation."
+	;;
+esac
